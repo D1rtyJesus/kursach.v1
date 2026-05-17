@@ -27,4 +27,3 @@ export function timeoutIterator(iterator, timeoutSec) {
         console.log(`[Spawn] ${enemy.type} (ID: ${enemy.id}, HP: ${enemy.hp}) entered the arena!`);
     }
 }
-//Task 1 (^_^)
