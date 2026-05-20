@@ -1,5 +1,5 @@
 export function* enemySpawner() {
-    const types = ["Goblin", "Orc", "Skeleton", "Troll"];
+    const types = ["Goblin", "Orc", "Skeleton", "Troll", "TRIPLE T", "Spider"];
     let id = 1;
 
     while (true) {
