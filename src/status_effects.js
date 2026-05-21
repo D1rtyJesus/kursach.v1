@@ -1,4 +1,4 @@
-export function withIgnite(entity) {
+export function Ignite(entity) {
     const ogAttack = entity.attack;
 
     entity.attack = function(target) {
