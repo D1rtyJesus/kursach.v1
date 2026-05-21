@@ -1,4 +1,4 @@
-function memoize(fn, options = {}) {
+export function memoize(fn, options = {}) {
     const cache = new Map();
     const maxS = options.maxS || Infinity;
     const strat = options.strat || "LRU";
@@ -8,7 +8,14 @@ function memoize(fn, options = {}) {
 
         if (cache.has(key)) {
             const save = cache.get(key);
-            save.count += 1;   
+            save.count += 1; 
+
+            if (strat === "LRU") {
+                cache.delete(key);
+                cache.set(key, save);
+            }
+
+            console.log(`[Cache Hit] взято з пам'яті: ${key}`);
             return save.value; 
         }
 
@@ -31,6 +38,7 @@ function memoize(fn, options = {}) {
             }
         }
 
+        console.log(`[Cache Miss] збереження:  ${key}`);
         cache.set(key, { value: result, count: 1 });
         return result;
     };
