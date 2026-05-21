@@ -1,0 +1,1 @@
+const shield = new Proxy(target, handler);
