@@ -1,23 +1,33 @@
-import { Spawner } from './spawner.js';
-import { Queue } from './queue.js';
+import { enemySpawner } from './spawner.js';
+import { Turnster } from './queue.js';
 import { Events } from './events.js';
-import { shield } from './shields.js';
-import { withIgnite } from './status_effects.js';
 import { AOE } from './AOE.js';
-import { getDamage } from './memory.js'; 
+import { shield } from './shields.js';
+import { Ignite } from './status_effects.js';
+import { memoize } from './memory.js';
 import { writeLog, closeLog } from './combat_log.js';
 
-const spawner = new Spawner();
-let knight = spawner.spawn("Knight");
-let mage = spawner.spawn("Mage");
-let orc1 = spawner.spawn("Orc");
-let orc2 = spawner.spawn("Orc");
+const bQueue = new Turnster();
+const gEvents = new Events();
 
-knight = shield(knight);
-mage = withIgnite(mage);
+const Damage = (base, armor) => Math.max(1, base - armor);
+const getDamage = memoize(calcDamage, { maxS: 50, strat: "LRU" });
 
-const battleQueue = new Queue();
-battleQueue.enqueue(knight); 
-battleQueue.enqueue(mage);
-battleQueue.enqueue(orc1);
-battleQueue.enqueue(orc2);
+gameEvents.on('attack', (data) => {
+    const msg = `${data.attacker} вдарив ${data.target} на ${data.dmg} урону!`;
+    console.log(msg);
+    writeLog(msg); 
+});
+console.log("Підготовка...");
+let player = {
+    type: "Fire Mage",
+    hp: 100,
+    attack(target) {
+        const finalDmg = getDamage(25, 5); 
+        target.hp -= finalDmg;
+        
+        gameEvents.emit('attack', { attacker: this.type, target: target.type, dmg: finalDmg });
+        return finalDmg;
+    }
+};
+player = Ignite(player);

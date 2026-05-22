@@ -15,7 +15,6 @@ export function memoize(fn, options = {}) {
                 cache.set(key, save);
             }
 
-            console.log(`[Cache Hit] взято з пам'яті: ${key}`);
             return save.value; 
         }
 
@@ -38,7 +37,6 @@ export function memoize(fn, options = {}) {
             }
         }
 
-        console.log(`[Cache Miss] збереження:  ${key}`);
         cache.set(key, { value: result, count: 1 });
         return result;
     };
